@@ -20,3 +20,8 @@ export { default as TrashIcon } from './TrashIcon';
 export { default as PinIcon } from './PinIcon';
 export { default as CheckIcon } from './CheckIcon';
 export { default as EditIcon } from './EditIcon';
+export { default as HamburgerIcon } from './HamburgerIcon';
+export { default as XIcon } from './XIcon';
+export { default as NotesIcon } from './NotesIcon';
+export { default as MagnifyingGlassIcon } from './MagnifyingGlassIcon';
+export { default as RotateIcon } from './RotateIcon';

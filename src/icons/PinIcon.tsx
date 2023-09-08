@@ -6,7 +6,6 @@ const PinIcon = (props: React.SVGProps<SVGSVGElement>) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      height="1em"
       viewBox="0 0 384 512"
       className={twMerge('w-4 h-4', className)}
       {...rest}

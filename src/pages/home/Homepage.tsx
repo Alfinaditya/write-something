@@ -1,7 +1,7 @@
 import { useLiveQuery } from 'dexie-react-hooks';
 import { db } from '../../db';
 import { useNavigate } from 'react-router-dom';
-import { PinIcon, TrashIcon } from '../../icons';
+import { PinIcon, TrashIcon, NotesIcon, PlusIcon } from '../../icons';
 import Parser from '../../components/Parser';
 import { twMerge } from 'tailwind-merge';
 import { useEffect, useState } from 'react';
@@ -41,15 +41,67 @@ const Homepage = () => {
 
   if (!notes) return <></>;
   return (
-    <>
-      <input
-        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-        id="username"
-        type="text"
-        placeholder="Username"
-        onChange={(e) => setQuery(e.target.value)}
-        value={query}
-      />
+    <div className="w-11/12 m-auto">
+      <div className="flex items-center">
+        <label htmlFor="simple-search" className="sr-only">
+          Search
+        </label>
+        <div className="relative w-full mb-4">
+          <div
+            className={twMerge(
+              'absolute inset-y-0 left-0',
+              'flex items-center',
+              'pl-3',
+              'pointer-events-none'
+            )}
+          >
+            <NotesIcon className="fill-main" />
+          </div>
+          <input
+            type="text"
+            id="simple-search"
+            className={twMerge(
+              'bg-gray-50 placeholder-gray-400 ',
+              'focus:ring-blue-500 focus:border-blue-500',
+              'border border-gray-600 rounded-lg',
+              'text-sm text-black',
+              'block',
+              'w-full',
+              'p-2.5 pl-10'
+            )}
+            placeholder="Search note..."
+            required
+            onChange={(e) => setQuery(e.target.value)}
+            value={query}
+          />
+        </div>
+      </div>
+      <div className={twMerge('w-full', 'sm:justify-end sm:flex', 'hidden')}>
+        <button
+          onClick={() => {
+            const uuid = crypto.randomUUID();
+            db.notes.add({
+              queryId: uuid,
+              createdAt: Date.now(),
+              updatedAt: Date.now(),
+              content: '',
+              deletedAt: 0,
+              isPinned: 0,
+              title: '',
+            });
+            navigate(`/note/${uuid}`);
+          }}
+          className={twMerge(
+            'text-white font-medium text-sm',
+            'focus:ring-4 focus:outline-none focus:ring-main',
+            'rounded-full',
+            'p-3 mr-2 mb-2',
+            'bg-main'
+          )}
+        >
+          <PlusIcon className="fill-white" />
+        </button>
+      </div>
       <button
         onClick={() => {
           const uuid = crypto.randomUUID();
@@ -64,71 +116,40 @@ const Homepage = () => {
           });
           navigate(`/note/${uuid}`);
         }}
+        className={twMerge(
+          'text-white font-medium text-sm ',
+          'focus:ring-4 focus:outline-none focus:ring-main',
+          'rounded-full',
+          'p-3 mr-2 mb-2',
+          'bg-main',
+          'fixed right-1 bottom-24',
+          'sm:hidden block'
+        )}
       >
-        Add Notes
+        <PlusIcon className="fill-white" />
       </button>
-      <h1>Pinned</h1>
-      {notes
-        .filter((note) => note.isPinned)
-        .map((note) => (
-          <div
-            key={crypto.randomUUID()}
-            className={twMerge('rounded-lg', 'bg-blue-500', 'max-w-max')}
-          >
-            <div
-              onClick={() => navigate(`/note/${note.queryId}`)}
-              key={note.queryId}
-              className={twMerge(
-                'truncate ...',
-                'w-[247px] h-[388px]',
-                'p-5',
-                'cursor-pointer'
-              )}
-            >
-              <h1
-              // className={twMerge(
-              //   query && note.title.includes(query) ? 'bg-yellow-500' : ''
-              // )}
-              >
-                {note.title}
-              </h1>
-              <Parser content={note.content} />
-            </div>
-            <div className="flex justify-end p-2 gap-2">
-              <PinIcon
-                onClick={() =>
-                  db.notes
-                    .where({ queryId: note.queryId })
-                    .modify({ isPinned: 0 })
-                }
-                className="fill-main cursor-pointer"
-              />
-              <TrashIcon
-                onClick={() =>
-                  db.notes
-                    .where({ queryId: note.queryId })
-                    .modify({ deletedAt: Date.now() })
-                }
-                className="fill-main cursor-pointer"
-              />
-            </div>
-          </div>
-        ))}
-      <h1>Others</h1>
-      <div className="flex gap-2">
+      <h1 className="my-4 text-lg font-bold">Pinned</h1>
+      <div className="flex gap-2 flex-wrap">
         {notes
-          .filter((note) => !note.isPinned)
+          .filter((note) => note.isPinned)
           .map((note) => (
             <div
               key={crypto.randomUUID()}
-              className={twMerge('rounded-lg', 'bg-blue-500', 'max-w-max')}
+              className={twMerge(
+                'rounded-lg border',
+                'sm:w-max sm:h-max',
+                'w-full h-44',
+                'bg-yellow-50',
+                'mb-4',
+                'truncate ...'
+              )}
             >
               <div
                 onClick={() => navigate(`/note/${note.queryId}`)}
                 key={note.queryId}
                 className={twMerge(
-                  'truncate ...',
-                  'w-[247px] h-[388px]',
+                  'sm:w-[247px] sm:h-[388px]',
+                  'w-full h-4/5',
                   'p-5',
                   'cursor-pointer'
                 )}
@@ -136,7 +157,56 @@ const Homepage = () => {
                 <h1>{note.title}</h1>
                 <Parser content={note.content} />
               </div>
-              <div className="flex justify-end p-2 gap-2">
+              <div className={twMerge('flex justify-end gap-2', 'p-2')}>
+                <PinIcon
+                  onClick={() =>
+                    db.notes
+                      .where({ queryId: note.queryId })
+                      .modify({ isPinned: 0 })
+                  }
+                  className="fill-main cursor-pointer"
+                />
+                <TrashIcon
+                  onClick={() =>
+                    db.notes
+                      .where({ queryId: note.queryId })
+                      .modify({ deletedAt: Date.now() })
+                  }
+                  className="fill-main cursor-pointer"
+                />
+              </div>
+            </div>
+          ))}
+      </div>
+      <h1 className="my-4 text-lg font-bold">Others</h1>
+      <div className="flex gap-2 flex-wrap">
+        {notes
+          .filter((note) => !note.isPinned)
+          .map((note) => (
+            <div
+              key={crypto.randomUUID()}
+              className={twMerge(
+                'rounded-lg border',
+                'sm:w-max sm:h-max',
+                'w-full h-44',
+                'mb-4',
+                'truncate ...'
+              )}
+            >
+              <div
+                onClick={() => navigate(`/note/${note.queryId}`)}
+                key={note.queryId}
+                className={twMerge(
+                  'sm:w-[247px] sm:h-[388px]',
+                  'w-full h-4/5',
+                  'p-5',
+                  'cursor-pointer'
+                )}
+              >
+                <h1>{note.title}</h1>
+                <Parser content={note.content} />
+              </div>
+              <div className={twMerge('flex justify-end gap-2', 'p-2')}>
                 <PinIcon
                   onClick={() =>
                     db.notes
@@ -156,29 +226,8 @@ const Homepage = () => {
               </div>
             </div>
           ))}
-        {/* {notes.filter((note) => (
-          <div className={twMerge('rounded-lg', 'bg-blue-500', 'max-w-max')}>
-            <div
-              onClick={() => navigate(`/note/${note.queryId}`)}
-              key={note.queryId}
-              className={twMerge(
-                'truncate ...',
-                'w-[247px] h-[388px]',
-                'p-5',
-                'cursor-pointer'
-              )}
-            >
-              <h1>{note.title}</h1>
-              <Parser content={note.content} />
-            </div>
-            <div className="flex justify-end p-2 gap-2">
-              <PinIcon onClick={() => alert('rock')} className="fill-main" />
-              <TrashIcon className="fill-main" />
-            </div>
-          </div>
-        ))} */}
       </div>
-    </>
+    </div>
   );
 };
 

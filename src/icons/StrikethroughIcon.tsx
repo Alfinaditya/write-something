@@ -5,7 +5,7 @@ const StrikethroughIcon = (props: React.SVGProps<SVGSVGElement>) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      className={twMerge('w-6 h-6', className)}
+      className={twMerge('w-5 h-5', className)}
       viewBox="0 0 512 512"
       {...rest}
     >

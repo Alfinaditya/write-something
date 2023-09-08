@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { db } from '../../db';
-import Toast from '../../components/Toast';
 import TextEditor from '../../components/TextEditor';
 import { useParams } from 'react-router-dom';
 
@@ -8,7 +7,6 @@ const NoteDetailsPage = () => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [mountTextEditor, setMountTextEditor] = useState(false);
-  const [showToast, setShowToast] = useState(false);
   const params = useParams();
   useEffect(() => {
     db.notes
@@ -32,13 +30,11 @@ const NoteDetailsPage = () => {
                 content: content,
                 title: title,
               });
-              setShowToast(true);
             }}
             defaultContent={content as string}
             defaultTitle={title}
           />
         )}
-        <Toast open={showToast} setOpen={setShowToast} />
       </div>
     </>
   );

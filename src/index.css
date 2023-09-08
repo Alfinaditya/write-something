@@ -1,7 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
+@layer base {
+  html {
+    font-family: 'Quicksand', system-ui, sans-serif;
+  }
+}
 .tiptap > * + * {
   margin-top: 0.75em;
 }
@@ -30,6 +34,7 @@
 .tiptap.ProseMirror {
   padding: 10px;
   min-height: 500px;
+  outline: none;
 }
 
 .tiptap h2 {
