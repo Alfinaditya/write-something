@@ -25,3 +25,5 @@ export { default as XIcon } from './XIcon';
 export { default as NotesIcon } from './NotesIcon';
 export { default as MagnifyingGlassIcon } from './MagnifyingGlassIcon';
 export { default as RotateIcon } from './RotateIcon';
+export { default as EmptyIcon } from './EmptyIcon';
+export { default as CancelIcon } from './CancelIcon';
