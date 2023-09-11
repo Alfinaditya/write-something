@@ -9,6 +9,7 @@ import TableRow from '@tiptap/extension-table-row';
 import Placeholder from '@tiptap/extension-placeholder';
 
 const extensions = [
+  // @ts-ignore
   TextStyle.configure({ types: [ListItem.name] }),
   Placeholder.configure({
     // Use a placeholder:

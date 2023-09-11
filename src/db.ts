@@ -68,4 +68,4 @@ export class Note {
   }
 }
 
-export var db = new Database();
+export const db = new Database();
