@@ -10,6 +10,7 @@ Write Something is a Simple Notes App.
 - Radix UI
 - Dexie.js
 - Tiptap
+- PWA
 
 # Time taken
 
